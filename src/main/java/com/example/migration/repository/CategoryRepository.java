@@ -25,6 +25,12 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     @Query("select c from Category c join fetch c.parent where c.parent.parent.name = 'PROGRAM' AND c.parent.parent.parent IS NULL")
     List<Category> findParentProgram();
 
+    @Query(name = "selectProgramCategoryRoot")
+    List<Category> findProgramCategoryRoot();
+
+    @Query(name = "selectProgramCategoryDepth1")
+    List<Category> findProgramCategoryDepth1();
+
     @Query(name = "selectProgramCategoryDepth2")
     List<Category> findProgramCategoryDepth2();
 

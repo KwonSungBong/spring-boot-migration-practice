@@ -87,12 +87,24 @@ import java.util.Date;
                 resultClass = Category.class
         )
 })
-@NamedQuery(
-        name="selectProgramCategoryDepth2",
-        query="SELECT c FROM Category c " +
-                "JOIN FETCH c.parent " +
-                "WHERE c.parent.parent.parent IS NULL " +
-                "AND c.parent.parent.name = '"+Category.PROGRAM_CATEGORY_ROOT_NAME+"'")
+@NamedQueries({
+        @NamedQuery(
+                name="selectProgramCategoryRoot",
+                query="SELECT c FROM Category c " +
+                        "WHERE c.parent IS NULL " +
+                        "AND c.name = '"+Category.PROGRAM_CATEGORY_ROOT_NAME+"'"),
+        @NamedQuery(
+                name="selectProgramCategoryDepth1",
+                query="SELECT c FROM Category c " +
+                        "WHERE c.parent.parent IS NULL " +
+                        "AND c.parent.name = '"+Category.PROGRAM_CATEGORY_ROOT_NAME+"'"),
+        @NamedQuery(
+                name="selectProgramCategoryDepth2",
+                query="SELECT c FROM Category c " +
+                        "JOIN FETCH c.parent " +
+                        "WHERE c.parent.parent.parent IS NULL " +
+                        "AND c.parent.parent.name = '"+Category.PROGRAM_CATEGORY_ROOT_NAME+"'")
+})
 @Entity
 @Data
 @NoArgsConstructor
