@@ -25,8 +25,7 @@ public class MigrationService {
     private CategoryRepository categoryRepository;
 
     public void migration() {
-//        importProgramCategory();
-        List<Category> test = categoryRepository.selectCategoryListByRoot();
+        importProgramCategory();
 
         System.out.println();
     }
@@ -34,26 +33,40 @@ public class MigrationService {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     @Transactional
     public void importProgramCategory() {
-        List<Category> rootList = categoryRepository.findProgramCategoryRoot();
-        if(rootList.size() == 0) return;
+        List<Category> rootCategoryList = categoryRepository.findProgramCategoryRoot();
+        if(rootCategoryList.size() == 0) return;
 
         final Date now = new Date();
         final String SEPARATOR = "|";
 
-        Category rootProgramCategory = rootList.get(0);
-        List<Category> programCategoryDepth1List = categoryRepository.findProgramCategoryDepth1();
-        List<Category> programCategoryDepth2List = categoryRepository.findProgramCategoryDepth2();
+        Category rootProgramCategory = rootCategoryList.get(0);
+        List<Category> categoryList = categoryRepository.selectCategoryListByRoot(rootProgramCategory.getId());
         List<Program> programList = (List<Program>) programRepository.findAll();
 
         Map<String, Category> programCategoryDepth1Map = new HashMap<>();
         Map<String, Category> programCategoryDepth2Map = new HashMap<>();
 
-        for(Category programCategory : programCategoryDepth1List) {
-            programCategoryDepth1Map.put(programCategory.getName(), programCategory);
+        for(Category programCategory : categoryList) {
+            if(programCategory.getParent().getId() == rootProgramCategory.getId()) {
+                programCategoryDepth1Map.put(programCategory.getName(), programCategory);
+            } else if(programCategory.getParent().getParent().getId() == rootProgramCategory.getId()) {
+                programCategoryDepth2Map.put(programCategory.getParent().getName()+SEPARATOR+programCategory.getName(), programCategory);
+
+            }
         }
-        for(Category programCategory : programCategoryDepth2List) {
-            programCategoryDepth2Map.put(programCategory.getParent().getName()+SEPARATOR+programCategory.getName(), programCategory);
-        }
+
+//        List<Category> programCategoryDepth1List = categoryRepository.findProgramCategoryDepth1();
+//        List<Category> programCategoryDepth2List = categoryRepository.findProgramCategoryDepth2();
+//
+//        Map<String, Category> programCategoryDepth1Map = new HashMap<>();
+//        Map<String, Category> programCategoryDepth2Map = new HashMap<>();
+//
+//        for(Category programCategory : programCategoryDepth1List) {
+//            programCategoryDepth1Map.put(programCategory.getName(), programCategory);
+//        }
+//        for(Category programCategory : programCategoryDepth2List) {
+//            programCategoryDepth2Map.put(programCategory.getParent().getName()+SEPARATOR+programCategory.getName(), programCategory);
+//        }
 
         List<Category> insertCategoryList = new ArrayList<>();
         List<String> duplicationCategoryDepth1NameList = new ArrayList<>();

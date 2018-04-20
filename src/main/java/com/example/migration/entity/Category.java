@@ -61,29 +61,26 @@ import java.util.Date;
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name    = "selectCategoryListByRoot",
-//                query   = "SELECT id, name, parent, created_at, modified_at, is_used " +
-//                        "FROM (SELECT * FROM category ORDER BY parent, id) category_sorted, (SELECT @pv := '29') initialisation " +
-//                        "WHERE FIND_IN_SET(parent, @pv) AND LENGTH(@pv := CONCAT(@pv, ',', id))",
-                query   = "SELECT id, name, parent, created_at, modified_at, is_used FROM category",
+                query   = "SELECT id, name, parent, created_at, modified_at, is_used " +
+                        "FROM (SELECT * FROM category ORDER BY parent, id) category_sorted, " +
+                        "(SELECT @pv \\:= (SELECT id FROM category WHERE name='PROGRAM' AND parent IS NULL)) initialisation " +
+                        "WHERE FIND_IN_SET(parent, @pv) AND LENGTH(@pv \\:= CONCAT(@pv, ',', id))",
                 resultClass = Category.class
         ),
         @NamedNativeQuery(
-                name    = "selectCategoryOneDepthListByRoot",
-                query   = "SELECT id, name, parent, created_at, modified_at, is_used FROM category",
+                name    = "selectCategoryListByRootName",
+                query   = "SELECT id, name, parent, created_at, modified_at, is_used " +
+                        "FROM (SELECT * FROM category ORDER BY parent, id) category_sorted, " +
+                        "(SELECT @pv \\:= (SELECT id FROM category WHERE name=:rootName AND parent IS NULL)) initialisation " +
+                        "WHERE FIND_IN_SET(parent, @pv) AND LENGTH(@pv \\:= CONCAT(@pv, ',', id))",
                 resultClass = Category.class
         ),
         @NamedNativeQuery(
-                name    = "selectCategoryTwoDepthListByRoot",
-                query   = "SELECT a.id AS id, a.name AS name, a.created_at AS created_at, a.modified_at AS modified_at, a.is_used AS is_used, " +
-//                        "b.id AS `parent.id`, b.name AS `parent.name`, b.created_at AS `parent.created_at`, " +
-//                        "b.modified_at AS `parent.modified_at`, b.is_used AS `parent.is_used`, " +
-                        "c.name AS root_name, a.modified_at AS parent " +
-                        "FROM category a " +
-                        "JOIN category b " +
-                        "ON a.parent = b.id " +
-                        "JOIN category c " +
-                        "ON b.parent = c.id AND c.name = 'PROGRAM' ",
-//                resultSetMapping = "CategoryResult"
+                name    = "selectCategoryListByRootId",
+                query   = "SELECT id, name, parent, created_at, modified_at, is_used " +
+                        "FROM (SELECT * FROM category ORDER BY parent, id) category_sorted, " +
+                        "(SELECT @pv \\:= :rootId) initialisation " +
+                        "WHERE FIND_IN_SET(parent, @pv) AND LENGTH(@pv \\:= CONCAT(@pv, ',', id))",
                 resultClass = Category.class
         )
 })
