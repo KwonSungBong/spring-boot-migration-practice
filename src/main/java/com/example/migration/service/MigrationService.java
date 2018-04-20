@@ -24,13 +24,8 @@ public class MigrationService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Transactional
     public void migration() {
-//        programRepository.setProgramCategoryList();
-
-//        List<Category> categoryList = categoryRepository.findProgramCategoryDepth2();
-
-//        importProgramCategory();
+        importProgramCategory();
 
         System.out.println();
     }
@@ -91,6 +86,60 @@ public class MigrationService {
         categoryRepository.save(insertCategoryList);
     }
 
+    private void saveProgramAndProgramCategory(List<Program> programList) {
+        final Date now = new Date();
+        final String SEPARATOR = "|";
+        List<Category> programCategoryDepth2List = categoryRepository.findProgramCategoryDepth2();
+
+        Category rootProgramCategory = programCategoryDepth2List.get(0).getParent().getParent();
+        Map<String, Category> programCategoryDepth1Map = new HashMap<>();
+        Map<String, Category> programCategoryDepth2Map = new HashMap<>();
+
+        for(Category programCategory : programCategoryDepth2List) {
+            programCategoryDepth1Map.put(programCategory.getParent().getName(), programCategory.getParent());
+            programCategoryDepth2Map.put(programCategory.getName()+SEPARATOR+programCategory.getParent().getName(), programCategory);
+        }
+
+        List<Category> insertCategoryList = new ArrayList<>();
+        List<String> duplicationCategoryDepth1NameList = new ArrayList<>();
+        List<String> duplicationCategoryDepth2NameList = new ArrayList<>();
+
+        for(Program program : programList) {
+            String categoryDepth1Key = program.getCategory1Name();
+            String categoryDepth2Key = program.getCategory1Name()+SEPARATOR+program.getCategory2Name();
+
+            if(programCategoryDepth1Map.get(categoryDepth1Key) == null &&
+                    !duplicationCategoryDepth1NameList.contains(categoryDepth1Key)) {
+                Category programCategoryDepth1 = new Category();
+                programCategoryDepth1.setParent(rootProgramCategory);
+                programCategoryDepth1.setName(program.getCategory1Name());
+                programCategoryDepth1.setCreatedAt(now);
+
+                insertCategoryList.add(programCategoryDepth1);
+                programCategoryDepth1Map.put(program.getCategory1Name(), programCategoryDepth1);
+
+                duplicationCategoryDepth1NameList.add(categoryDepth1Key);
+            }
+            if(programCategoryDepth2Map.get(categoryDepth2Key) == null &&
+                    !duplicationCategoryDepth2NameList.contains(categoryDepth2Key)) {
+                Category programCategoryDepth2 = new Category();
+                programCategoryDepth2.setParent(programCategoryDepth1Map.get(program.getCategory1Name()));
+                programCategoryDepth2.setName(program.getCategory2Name());
+                programCategoryDepth2.setCreatedAt(now);
+
+                insertCategoryList.add(programCategoryDepth2);
+                programCategoryDepth2Map.put(categoryDepth2Key, programCategoryDepth2);
+
+                duplicationCategoryDepth2NameList.add(categoryDepth2Key);
+            }
+
+            program.setCategory(programCategoryDepth2Map.get(categoryDepth2Key));
+        }
+
+        categoryRepository.save(insertCategoryList);
+        programRepository.save(programList);
+    }
+
     @Transactional
     public void createProgramCategory() {
         final String rootName = "PROGRAM";
@@ -132,8 +181,8 @@ public class MigrationService {
     }
 
     @Transactional
-    public void setProgramCategory() {
-        programRepository.setProgramCategoryList();
+    public void updateProgramCategoryByCategoryIsNull() {
+        programRepository.updateProgramCategoryByCategoryIsNull();
 
         System.out.println();
     }

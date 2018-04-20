@@ -16,7 +16,7 @@ public interface ProgramRepository extends CrudRepository<Program, String> {
     List<ProgramCategory> getProgramCategoryList();
 
     @Modifying(clearAutomatically = true)
-    @Query(name = "updateProgramCategoryList")
-    int setProgramCategoryList();
+    @Query(name = "updateProgramCategoryByCategoryIsNull")
+    int updateProgramCategoryByCategoryIsNull();
 
 }

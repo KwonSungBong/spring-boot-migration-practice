@@ -26,7 +26,7 @@ import javax.persistence.*;
                 resultSetMapping = "ProgramCategoryResult"
         ),
         @NamedNativeQuery(
-                name    = "updateProgramCategoryList",
+                name    = "updateProgramCategoryByCategoryIsNull",
                 query   = "UPDATE program a " +
                         "JOIN (SELECT a.id AS category_id, b.name AS category1_name, a.name AS category2_name " +
                         "FROM category a  " +
