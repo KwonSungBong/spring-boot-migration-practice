@@ -51,7 +51,6 @@ public class MigrationService {
                 programCategoryDepth1Map.put(programCategory.getName(), programCategory);
             } else if(programCategory.getParent().getParent().getId() == rootProgramCategory.getId()) {
                 programCategoryDepth2Map.put(programCategory.getParent().getName()+SEPARATOR+programCategory.getName(), programCategory);
-
             }
         }
 

@@ -126,11 +126,13 @@ public class Category {
 
     private boolean isUsed = true;
 
+//    @CreatedDate
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date createdAt;
 
+//    @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date modifiedAt;
