@@ -13,35 +13,6 @@ import java.util.Date;
 @SqlResultSetMappings({
         @SqlResultSetMapping(
                 name = "CategoryResult",
-//                entities = {
-//                        @EntityResult(entityClass=Category.class,
-//                                fields = {
-//                                        @FieldResult(name="id", column = "id"),
-//                                        @FieldResult(name="name", column = "name"),
-//                                        @FieldResult(name="createdAt", column = "createdAt"),
-//                                        @FieldResult(name="modifiedAt", column = "modifiedAt"),
-//                                        @FieldResult(name="isUsed", column = "isUsed"),
-//                                        @FieldResult(name="rootName", column = "rootName"),
-//                                        @FieldResult(name="parent", column = "parent_")
-////                                ,
-////                                @FieldResult(name="parent.id", column = "parent_id"),
-////                                @FieldResult(name="parent.name", column = "parent_name"),
-////                                @FieldResult(name="parent.createdAt", column = "parent_createdAt"),
-////                                @FieldResult(name="parent.modifiedAt", column = "parent_modifiedAt"),
-////                                @FieldResult(name="parent.isUsed", column = "parent_isUsed")
-//                                }),
-//                        @EntityResult(entityClass=Category.class,
-//                                fields = {
-//                                @FieldResult(name="id", column = "parent_id"),
-//                                @FieldResult(name="name", column = "parent_name"),
-//                                @FieldResult(name="createdAt", column = "parent_createdAt"),
-//                                @FieldResult(name="modifiedAt", column = "parent_modifiedAt"),
-//                                @FieldResult(name="isUsed", column = "parent_isUsed")
-//                                }),
-//
-//                },
-//                columns={@ColumnResult(name="parent")}
-//                ,
                 classes = {
                         @ConstructorResult(
                                 targetClass = ProgramCategory.class,
@@ -116,9 +87,6 @@ public class Category {
     private Long id;
 
     private String name;
-
-    @Transient
-    private String rootName;
 
     @ManyToOne
     @JoinColumn(name="parent")

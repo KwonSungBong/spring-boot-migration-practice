@@ -1,5 +1,6 @@
 package com.example.migration.repository;
 
+import com.example.migration.dto.ProgramDto;
 import com.example.migration.entity.Program;
 import com.example.migration.entity.ProgramCategory;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,5 +19,17 @@ public interface ProgramRepository extends CrudRepository<Program, String> {
     @Modifying(clearAutomatically = true)
     @Query(name = "updateProgramCategoryByCategoryIsNull")
     int updateProgramCategoryByCategoryIsNull();
+
+    @Query(name = "selectProgramDtoList")
+    List<ProgramDto> selectProgramDtoList();
+
+    @Query(name = "selectProgramAndCategoryList")
+    List<Object[]> selectProgramAndCategoryArrayList();
+
+    @Query(name = "selectProgramAndCategoryList")
+    List<Program> selectProgramAndCategoryList();
+
+    @Query(name = "selectProgramAndCategoryWrapperList")
+    List<Object[]> selectProgramAndCategoryWrapperList();
 
 }
