@@ -81,6 +81,8 @@ import java.util.Date;
 public class Category {
 
     public static final String PROGRAM_CATEGORY_ROOT_NAME = "PROGRAM";
+    public static final int CATEGORY_ROOT_DEPTH = 0;
+    public static final String SEPARATOR = "|";
 
     @Id
     @GeneratedValue
@@ -105,6 +107,9 @@ public class Category {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date modifiedAt;
 
+    private String fullPath;
+    private String fullPathName;
+
     public Category(String name, Date createdAt, Category parent) {
         this.name = name;
         this.createdAt = createdAt;
@@ -113,25 +118,38 @@ public class Category {
 
     @PrePersist
     public void prePersist(){
-        System.out.println("prePersist id=" + id);
+        setModifiedAt(new Date());
     }
 
     @PostPersist
     public void postPersist(){
-        System.out.println("postPersist id=" + id);
-    }
-    @PostLoad
-    public void postLoad(){
-        System.out.println("postLoad");
+        Category parent = getParent();
+        fullPath = parent == null ? String.valueOf(getId()) : parent.getFullPath() + SEPARATOR + getId();
+        fullPathName = parent == null ?getName() : parent.getFullPathName()+SEPARATOR+name;
     }
 
-    @PreRemove
-    public void preRemove(){
-        System.out.println("preRemove");
-    }
 
-    @PostRemove
-    public void postRemove(){
-        System.out.println("postRemove");
-    }
+//    @PrePersist
+//    public void prePersist(){
+//        System.out.println("prePersist id=" + id);
+//    }
+//
+//    @PostPersist
+//    public void postPersist(){
+//        System.out.println("postPersist id=" + id);
+//    }
+//    @PostLoad
+//    public void postLoad(){
+//        System.out.println("postLoad");
+//    }
+//
+//    @PreRemove
+//    public void preRemove(){
+//        System.out.println("preRemove");
+//    }
+//
+//    @PostRemove
+//    public void postRemove(){
+//        System.out.println("postRemove");
+//    }
 }

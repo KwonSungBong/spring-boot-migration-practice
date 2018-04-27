@@ -41,4 +41,20 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
             "WHERE FIND_IN_SET(parent, @pv) AND LENGTH(@pv \\:= CONCAT(@pv, ',', id))", nativeQuery = true)
     List<Category> test();
 
+    @Query("SELECT c FROM Category c " +
+            "WHERE c.parent IS NULL " +
+            "AND c.name = :rootName")
+    Category findCategoryByRootName(@Param("rootName") String rootName);
+
+
+    @Query("SELECT c FROM Category c " +
+            "WHERE c.parent.parent IS NULL " +
+            "AND c.parent.name = :rootName")
+    List<Category> findCategoryDepth1ByRootName(@Param("rootName") String rootName);
+
+    @Query("SELECT c FROM Category c JOIN FETCH c.parent " +
+            "WHERE c.parent.parent.parent IS NULL " +
+            "AND c.parent.parent.name = :rootName")
+    List<Category> findCategoryDepth2ByRootName(@Param("rootName") String rootName);
+
 }

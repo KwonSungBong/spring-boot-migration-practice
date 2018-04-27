@@ -5,6 +5,8 @@ CREATE TABLE `category` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified_at` datetime DEFAULT NULL,
   `is_used` bigint(1) NOT NULL DEFAULT '1',
+  `full_path` varchar(100) DEFAULT NULL,
+  `full_path_name` varchar(4000) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKcmtwvovxcdalvlgifxh6luun8` (`parent`) USING BTREE,
   CONSTRAINT `FKcmtwvovxcdalvlgifxh6luun8` FOREIGN KEY (`parent`) REFERENCES `category` (`id`)
@@ -29,5 +31,5 @@ CREATE TABLE `program` (
   CONSTRAINT `FK2wep6dkcpotc85hj9vcubsrll` FOREIGN KEY (`category`) REFERENCES `category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO category(`name`, `is_used`) value("PROGRAM프로그램", 1);
-
+INSERT INTO category(`name`, `is_used`) value("PROGRAM", 1);
+UPDATE category SET `full_path`=id, `full_path_name`=`name` WHERE `name`="PROGRAM" AND `parent` IS NULL;

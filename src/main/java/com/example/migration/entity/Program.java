@@ -7,6 +7,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
 
+import static com.example.migration.entity.Category.PROGRAM_CATEGORY_ROOT_NAME;
+import static com.example.migration.entity.Category.SEPARATOR;
+
 @SqlResultSetMappings({
         @SqlResultSetMapping(
                 name = "ProgramCategoryResult",
@@ -177,6 +180,9 @@ import java.util.Date;
 @Data
 public class Program {
 
+    public static final int PROGRAM_CATEGORY_MIN_DEPTH = 1;
+    public static final int PROGRAM_CATEGORY_MAX_DEPTH = 2;
+
     @Id
     private String id;
 
@@ -209,4 +215,37 @@ public class Program {
     @JoinColumn(name="category")
     private Category category;
 
+    public String getCategoryName(int depth) {
+        if(depth == 1) {
+            return category1Name;
+        } else if(depth == 2) {
+            return category2Name;
+        } else {
+            return "";
+        }
+    }
+
+    public String getCategoryParentFullPathName(int depth) {
+        if(depth == 1) {
+            return PROGRAM_CATEGORY_ROOT_NAME;
+        } else if(depth == 2) {
+            return PROGRAM_CATEGORY_ROOT_NAME+SEPARATOR+category1Name;
+        } else {
+            return "";
+        }
+    }
+
+    public String getCategoryFullPathName(int depth) {
+        if(depth == 1) {
+            return PROGRAM_CATEGORY_ROOT_NAME+SEPARATOR+category1Name;
+        } else if(depth == 2) {
+            return PROGRAM_CATEGORY_ROOT_NAME+SEPARATOR+category1Name+SEPARATOR+category2Name;
+        } else {
+            return "";
+        }
+    }
+
+    public boolean checkCategoryDepth(int depth) {
+        return depth >= PROGRAM_CATEGORY_MIN_DEPTH && depth <= PROGRAM_CATEGORY_MAX_DEPTH;
+    }
 }
