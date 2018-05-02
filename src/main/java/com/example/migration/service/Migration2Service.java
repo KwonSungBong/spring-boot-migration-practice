@@ -47,7 +47,7 @@ public class Migration2Service {
                 Map<String, Category> programCategoryMap = programCategoryDepthArray[depth];
                 final String categoryKey = program.getCategoryFullPathName(depth);
 
-                if(programCategoryMap.get(categoryKey) == null) {
+                if(!programCategoryMap.containsKey(categoryKey)) {
                     Category programCategory = new Category();
                     programCategory.setParent(getParentProgramCategory
                             .apply(depth, program.getCategoryParentFullPathName(depth)));
