@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import static com.example.migration.entity.Category.CATEGORY_ROOT_DEPTH;
 import static com.example.migration.entity.Category.PROGRAM_CATEGORY_ROOT_NAME;
@@ -41,7 +42,6 @@ public class Migration2Service {
             return programCategoryDepthArray[depth-1].get(categorykey);
         };
 
-        Set<Category> insertCategorySet = new HashSet<>();
         for(Program program : programList) {
             for(int depth = PROGRAM_CATEGORY_MIN_DEPTH; depth <= PROGRAM_CATEGORY_MAX_DEPTH; depth++) {
                 Map<String, Category> programCategoryMap = programCategoryDepthArray[depth];
@@ -55,7 +55,6 @@ public class Migration2Service {
                     programCategory.setCreatedAt(now);
 
                     programCategoryMap.put(categoryKey, programCategory);
-                    insertCategorySet.add(programCategory);
                 }
             }
 
@@ -63,10 +62,19 @@ public class Migration2Service {
                     .get(program.getCategoryFullPathName(PROGRAM_CATEGORY_MAX_DEPTH)));
         }
 
-        categoryRepository.save(insertCategorySet);
+        saveProgramCategoryDepthArray(programCategoryDepthArray);
         programRepository.save(programList);
     }
 
+    private void saveProgramCategoryDepthArray(Map<String, Category>[] programCategoryDepthArray) {
+        Set<Category> insertCategoryDepth1Set = programCategoryDepthArray[1].values().stream().
+                filter(category -> category.getId() == null).collect(Collectors.toSet());
+        categoryRepository.save(insertCategoryDepth1Set);
+
+        Set<Category> insertCategoryDepth2Set = programCategoryDepthArray[2].values().stream().
+                filter(category -> category.getId() == null).collect(Collectors.toSet());
+        categoryRepository.save(insertCategoryDepth2Set);
+    }
 
     private Map<String, Category>[] getProgramCategoryDepthArray() {
         final Category programCategoryRoot = categoryRepository.findCategoryByRootName(PROGRAM_CATEGORY_ROOT_NAME);
@@ -83,10 +91,10 @@ public class Migration2Service {
 
         programCategoryDepthArray[CATEGORY_ROOT_DEPTH].put(programCategoryRoot.getFullPathName(), programCategoryRoot);
         for(Category programCategory : programCategoryDepth1List) {
-            programCategoryDepthArray[1] .put(programCategory.getFullPathName(), programCategory);
+            programCategoryDepthArray[1].put(programCategory.getFullPathName(), programCategory);
         }
         for(Category programCategory : programCategoryDepth2List) {
-            programCategoryDepthArray[2] .put(programCategory.getFullPathName(), programCategory);
+            programCategoryDepthArray[2].put(programCategory.getFullPathName(), programCategory);
         }
 
         return programCategoryDepthArray;

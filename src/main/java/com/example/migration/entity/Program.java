@@ -216,32 +216,35 @@ public class Program {
     private Category category;
 
     public String getCategoryName(int depth) {
-        if(depth == 1) {
-            return category1Name;
-        } else if(depth == 2) {
-            return category2Name;
-        } else {
-            return "";
+        switch(depth){
+            case 1 :
+                return category1Name;
+            case 2 :
+                return category2Name;
+            default :
+                throw new RuntimeException("Could not apply depth");
         }
     }
 
     public String getCategoryParentFullPathName(int depth) {
-        if(depth == 1) {
-            return PROGRAM_CATEGORY_ROOT_NAME;
-        } else if(depth == 2) {
-            return PROGRAM_CATEGORY_ROOT_NAME+SEPARATOR+category1Name;
-        } else {
-            return "";
+        switch(depth){
+            case 1 :
+                return PROGRAM_CATEGORY_ROOT_NAME;
+            case 2 :
+                return PROGRAM_CATEGORY_ROOT_NAME+SEPARATOR+category1Name;
+            default :
+                throw new RuntimeException("Could not apply depth");
         }
     }
 
     public String getCategoryFullPathName(int depth) {
-        if(depth == 1) {
-            return PROGRAM_CATEGORY_ROOT_NAME+SEPARATOR+category1Name;
-        } else if(depth == 2) {
-            return PROGRAM_CATEGORY_ROOT_NAME+SEPARATOR+category1Name+SEPARATOR+category2Name;
-        } else {
-            return "";
+        switch(depth){
+            case 1 :
+                return PROGRAM_CATEGORY_ROOT_NAME+SEPARATOR+category1Name;
+            case 2 :
+                return PROGRAM_CATEGORY_ROOT_NAME+SEPARATOR+category1Name+SEPARATOR+category2Name;
+            default :
+                throw new RuntimeException("Could not apply depth");
         }
     }
 

@@ -124,10 +124,12 @@ public class Category {
     @PostPersist
     public void postPersist(){
         Category parent = getParent();
-        fullPath = parent == null ? String.valueOf(getId()) : parent.getFullPath() + SEPARATOR + getId();
-        fullPathName = parent == null ?getName() : parent.getFullPathName()+SEPARATOR+name;
-    }
+        if(parent == null || parent.getFullPath() == null || parent.getFullPathName() == null)
+            throw new RuntimeException("Not found category parent");
 
+        fullPath = parent.getFullPath()+SEPARATOR+getId();
+        fullPathName = parent.getFullPathName()+SEPARATOR+name;
+    }
 
 //    @PrePersist
 //    public void prePersist(){

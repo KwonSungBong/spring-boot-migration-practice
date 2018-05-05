@@ -13,9 +13,17 @@ public class MigrationServiceTests {
 	@Autowired
 	private MigrationService migrationService;
 
+	@Autowired
+	private Migration2Service migration2Service;
+
 	@Test
 	public void TEST() {
 		migrationService.migration();
+	}
+
+	@Test
+	public void TEST2() {
+		migration2Service.migration();
 	}
 
 }
