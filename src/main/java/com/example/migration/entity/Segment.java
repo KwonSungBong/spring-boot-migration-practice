@@ -1,6 +1,7 @@
 package com.example.migration.entity;
 
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@ToString(exclude = "segmentCategory")
 public class Segment {
 
     @Id
@@ -22,6 +24,9 @@ public class Segment {
     @NotNull
     @Column(length = 4000)
     private String configuration;
+
+    @OneToOne
+    private SegmentCategory segmentCategory;
 
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull

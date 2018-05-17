@@ -81,6 +81,7 @@ import java.util.Date;
 public class Category {
 
     public static final String PROGRAM_CATEGORY_ROOT_NAME = "PROGRAM";
+    public static final String SEGMENT_CATEGORY_ROOT_NAME = "SEGMENT";
     public static final int CATEGORY_ROOT_DEPTH = 0;
     public static final String SEPARATOR = "|";
 

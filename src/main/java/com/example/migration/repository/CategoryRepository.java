@@ -57,4 +57,9 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
             "AND c.parent.parent.name = :rootName")
     List<Category> findCategoryDepth2ByRootName(@Param("rootName") String rootName);
 
+    @Query("SELECT c FROM Category c JOIN FETCH c.parent " +
+            "WHERE c.parent.parent IS NULL AND c.parent.name = :rootName " +
+            "AND c.name = :name")
+    Category findByRootNameAndName(@Param("rootName") String rootName, @Param("name") String name);
+
 }

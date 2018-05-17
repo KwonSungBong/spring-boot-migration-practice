@@ -1,6 +1,7 @@
 package com.example.migration.entity;
 
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -9,17 +10,18 @@ import java.util.Date;
 
 @Entity
 @Data
+@ToString(exclude = {"segment", "category"})
 public class SegmentCategory {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="segment")
     private Segment segment;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="category")
     private Category category;
 

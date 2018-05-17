@@ -33,3 +33,28 @@ CREATE TABLE `program` (
 
 INSERT INTO category(`name`, `is_used`) value("PROGRAM", 1);
 UPDATE category SET `full_path`=id, `full_path_name`=`name` WHERE `name`="PROGRAM" AND `parent` IS NULL;
+
+INSERT INTO category(`name`, `is_used`) value("SEGMENT", 1);
+UPDATE category SET `full_path`=id, `full_path_name`=`name` WHERE `name`="SEGMENT" AND `parent` IS NULL;
+
+CREATE TABLE `segment` (
+  `id` bigint auto_increment PRIMARY KEY,
+  `configuration` varchar(4000) NOT NULL,
+  `name` varchar(255) NULL,
+  `description` varchar(255) NULL,
+  `created_at` datetime default CURRENT_TIMESTAMP NOT NULL,
+  `modified_at` datetime NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `segment_category` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `segment` bigint(20) NOT NULL,
+  `category` bigint(20) NOT NULL,
+  `created_at` datetime NOT NULL default now(),
+  `modified_at` datetime default NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_segment_category_idx1` (`segment`),
+  CONSTRAINT `fk_segment_category_11` FOREIGN KEY (`segment`) REFERENCES `segment` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_segment_category_22` FOREIGN KEY (`category`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
