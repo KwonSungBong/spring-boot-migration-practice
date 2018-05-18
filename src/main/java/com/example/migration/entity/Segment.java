@@ -25,7 +25,7 @@ public class Segment {
     @Column(length = 4000)
     private String configuration;
 
-    @OneToOne
+    @OneToOne(mappedBy = "segment")
     private SegmentCategory segmentCategory;
 
     @Temporal(TemporalType.TIMESTAMP)
