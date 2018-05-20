@@ -2,34 +2,37 @@ package com.example.migration.entity;
 
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
-@ToString(exclude = {"segment", "category"})
-public class SegmentCategory {
+@ToString(exclude = {"campaignCategoryList", "businessCategoryList"})
+public class Campaign {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name="segment")
-    private Segment segment;
+    private String name;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="category")
-    private Category category;
+    @OneToMany(mappedBy = "campaign")
+    private List<CampaignCategory> campaignCategoryList;
 
-    @NotNull
+    @OneToMany(mappedBy = "campaign")
+    private List<BusinessCategory> businessCategoryList;
+
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date createdAt;
 
+    @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date modifiedAt;

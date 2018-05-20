@@ -8,39 +8,24 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SegmentCategoryServiceTests {
+public class CampaignCategoryServiceTests {
 
 	@Autowired
-	private SegmentCategoryService segmentCategoryService;
+	private CampaignCategoryService campaignCategoryService;
 
 	@Test
 	public void TEST1() {
-		segmentCategoryService.test1();
+		campaignCategoryService.test1();
 	}
 
 	@Test
 	public void TEST2() {
-		segmentCategoryService.test2();
+		campaignCategoryService.test2();
 	}
 
 	@Test
 	public void TEST3() {
-		segmentCategoryService.test3();
-	}
-
-	@Test
-	public void TEST4() {
-		segmentCategoryService.test4();
-	}
-
-	@Test
-	public void TEST5() {
-		segmentCategoryService.test5();
-	}
-
-	@Test
-	public void TEST6() {
-		segmentCategoryService.test6();
+		campaignCategoryService.test3();
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SegmentCategoryService {
@@ -85,6 +86,7 @@ public class SegmentCategoryService {
             category.setName(segmentName);
             category.setParent(root);
             category.setCreatedAt(new Date());
+            categoryRepository.save(category);
         }
 
         return category;
@@ -98,6 +100,20 @@ public class SegmentCategoryService {
 
     public void test4() {
         Iterable<SegmentCategory> segmentCategoryIterable = segmentCategoryRepository.findAll();
+
+        System.out.println();
+    }
+
+    public void test5() {
+        long id = 263L;
+        List<Segment> segmentList = segmentRepository.findBySegmentCategoryCategoryId(id);
+
+        System.out.println();
+    }
+
+    public void test6() {
+        long id = 263L;
+        List<SegmentCategory> segmentCategoryList = segmentCategoryRepository.findByCategoryId(id);
 
         System.out.println();
     }
