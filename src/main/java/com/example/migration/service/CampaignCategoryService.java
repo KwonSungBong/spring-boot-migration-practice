@@ -3,7 +3,6 @@ package com.example.migration.service;
 import com.example.migration.entity.Campaign;
 import com.example.migration.entity.CampaignCategory;
 import com.example.migration.entity.Category;
-import com.example.migration.entity.Segment;
 import com.example.migration.repository.CampaignCategoryRepository;
 import com.example.migration.repository.CampaignRepository;
 import com.example.migration.repository.CategoryRepository;
@@ -12,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CampaignCategoryService {
@@ -62,7 +64,7 @@ public class CampaignCategoryService {
     private Campaign getCampaign() {
         Campaign campaign = new Campaign();
         campaign.setName("test9");
-
+        campaign.setTagList(Arrays.asList("a", "b", "c", "d", "e"));
         return campaign;
     }
 

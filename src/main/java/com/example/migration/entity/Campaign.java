@@ -1,5 +1,6 @@
 package com.example.migration.entity;
 
+import com.example.migration.entity.converter.ListToStringConveter;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
@@ -26,6 +27,9 @@ public class Campaign {
 
     @OneToMany(mappedBy = "campaign")
     private List<BusinessCategory> businessCategoryList;
+
+    @Convert(converter = ListToStringConveter.class)
+    private List<String> tagList;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
